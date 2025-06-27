@@ -13,8 +13,9 @@ const Navbar = () => {
 
         <div className='space-x-4'>
             <Link href='/'>Home</Link>
-            <Link href='/'>Create NFt</Link>
-            <Link href='/'>My NFT</Link>
+            <Link href='/create'>Create NFT</Link>
+            <Link href='/list-nft'>List NFT</Link>
+            <Link href='/my-nft'>My NFT</Link>
 
             {currentAccount ? 
             <span className='bg-gray-700 px-3 py-1 rounded'>{currentAccount.slice(0,6)}...{currentAccount.slice(-4)}</span>:
