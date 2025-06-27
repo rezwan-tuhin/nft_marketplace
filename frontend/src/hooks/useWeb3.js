@@ -1,0 +1,31 @@
+import { getNftContract, getMarketplaceContract } from "@/lib/getContract"
+import { ethers } from "ethers";
+
+export default function useWeb3() {
+
+    const createNft = async () => {
+
+    }
+
+    const listNft = async(nftAddress, tokenId, price) => {
+        try{
+            const contract = getMarketplaceContract(true);
+            const listingPrice = await contract.getListingPrice();
+            const tx = await contract.createMarketItem(nftAddress, tokenId, ethers.parseEther(price), {value: listingPrice});
+            await tx.wait();
+        }catch(error) {
+            console.error("Error listing Nft: ", error);
+        }
+    }
+
+    const buyNft = async (tokenId, price) => {
+        try{
+            const contract = getMarketplaceContract(true);
+
+            const tx = contract.buyMarketItem(tokenId, {value: ethers.parseEther(price)});
+            await tx.wait();
+        }catch(error) {
+            console.error("Error buying NFT: ", error);
+        }
+    }
+}
