@@ -2,7 +2,7 @@ import React from 'react'
 import nftImage from '@/assets/image/nft.png';
 import NftCard from '@/components/NftCard';
 
-const page = () => {
+const MyNft = () => {
 
   const nft = {
     image: nftImage,
@@ -33,4 +33,4 @@ const page = () => {
   )
 }
 
-export default page
+export default MyNft

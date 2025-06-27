@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { uploadToPinata, uploadJsonToPinata } from '@/lib/pinata'
 import { getNftContract } from '@/lib/getContract'
 
-const page = () => {
+const Create = () => {
 
     const [image, setImage] = useState(null);
     const [name, setName] = useState('');
@@ -90,4 +90,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Create;

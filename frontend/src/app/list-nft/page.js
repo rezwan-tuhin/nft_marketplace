@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import useWeb3 from '@/hooks/useWeb3';
 
-const page = () => {
+const ListNft = () => {
     const [nftAddress, setNftAddress] = useState('');
     const [tokenId, setTokenId] = useState('');
     const [price, setPrice] = useState('');
@@ -51,4 +51,4 @@ const page = () => {
   )
 }
 
-export default page
+export default ListNft;
