@@ -9,40 +9,56 @@ const Home = () => {
   const [nft, setNft] = useState([]);
   const {buyNft} = useWeb3();
 
-
 useEffect(() => {
-  const fetchNft = async() => {
-    try{
+  const fetchNft = async () => {
+    try {
       const marketplaceContract = getMarketplaceContract();
-      const nftContract= getNftContract();
-      const nfts = await marketplaceContract.fetchMarketItems();
+      const nftContract = getNftContract();
+
+      const marketItems = await marketplaceContract.fetchMarketItems();
+
       const nftDetails = await Promise.all(
-        nfts.map(async (item) =>{
-          const tokenURI = await nftContract.tokenURI(item.tokenId);
+        marketItems.map(async (item) => {
+          try {
+            const tokenId = item.tokenId.toString();
+            const itemId = item.itemId.toString();
+            const price = item.price.toString();
 
-          const response = await fetch(tokenURI);
-          const metadata = await response.json();
+            const tokenURI = await nftContract.tokenURI(tokenId);
+            if (!tokenURI) return null;
 
-          return {
-            itemId: item.itemId.toString(),
-            tokenId: item.tokenId.toString(),
-            price: item.price.toString(),
-            seller: item.seller,
-            owner: item.owner,
-            image: metadata.image,
-            name: metadata.name,
-            description: metadata.description,
+            const response = await fetch(tokenURI);
+            if (!response.ok) return null;
+
+            const metadata = await response.json();
+            if (!metadata?.image || !metadata?.name) return null;
+
+            return {
+              itemId,
+              tokenId,
+              price,
+              seller: item.seller,
+              owner: item.owner,
+              image: metadata.image,
+              name: metadata.name,
+              description: metadata.description,
+            };
+          } catch (error) {
+            console.warn(`Failed to load NFT ${item.tokenId}:`, error);
+            return null;
           }
         })
       );
 
-      setNft(nftDetails);
-    }catch(error) {
-      console.error("error fetching NFT: ", error);
+      setNft(nftDetails.filter(Boolean)); // removes null values
+    } catch (error) {
+      console.error("Error fetching NFTs:", error);
     }
-  }
+  };
+
   fetchNft();
 }, []);
+
 
 
   const handleBuy = async(itemId, price) => {

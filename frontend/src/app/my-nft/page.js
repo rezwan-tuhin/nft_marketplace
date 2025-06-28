@@ -13,42 +13,58 @@ const MyNft = () => {
   const[loading, setLoading] = useState({});
   const[price, setPrice] = useState({});
 
+
   const fetchMintedNft = async () => {
     try {
       if (!currentAccount) return;
       const nftContract = getNftContract();
-
+  
       const filter = nftContract.filters.Transfer(null, currentAccount);
       const events = await nftContract.queryFilter(filter);
-
-      const tokenData = [];
-
-      for (const event of events) {
-        const tokenId = event.args.tokenId.toString();
-        const currentOwner = await nftContract.ownerOf(tokenId);
-        if (currentOwner.toLowerCase() === currentAccount.toLowerCase()) {
-          const tokenUri = await nftContract.tokenURI(tokenId);
-         
-            const response = await fetch(tokenUri);
-            if(!response.ok) continue;
+  
+      const tokenIds = events.map(event => event.args.tokenId.toString());
+  
+      // Remove duplicates 
+      const uniqueTokenIds = [...new Set(tokenIds)];
+  
+      const nftData = await Promise.all(
+        uniqueTokenIds.map(async (tokenId) => {
+          try {
+            const [owner, tokenURI] = await Promise.all([
+              nftContract.ownerOf(tokenId),
+              nftContract.tokenURI(tokenId),
+            ]);
+  
+            if (owner.toLowerCase() !== currentAccount.toLowerCase()) {
+              return null;
+            }
+  
+            const response = await fetch(tokenURI);
+            if (!response.ok) return null;
             const metadata = await response.json();
-
-            tokenData.push({
-              tokenId: tokenId,
-              contractAddress : nftContract.address,
+  
+            return {
+              tokenId,
+              contractAddress: nftContract.address,
               image: metadata.image,
               name: metadata.name,
               description: metadata.description,
-            });
-          
-        }
-      }
+            };
+          } catch (err) {
+            console.warn(`Failed to process token ${tokenId}:`, err);
+            return null;
+          }
+        })
+      );
+  
+      setMintedNft(nftData.filter(Boolean));
 
-      setMintedNft(tokenData);
+      //this code is above line's alternative nftData.filter(item => item !== null && item !== undefined && item !== false);
     } catch (error) {
       console.error("Error fetching minted nft: ", error);
     }
   };
+  
 
   const hanldeLising = async(nftAddress, tokenId, price) => {
 
