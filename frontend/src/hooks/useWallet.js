@@ -10,7 +10,7 @@ export default function useWallet() {
         if(!window.ethereum) return alert("Please install metamask!");
 
         try{
-            const accounts = window.ethereum.request({
+            const accounts = await window.ethereum.request({
                 method: 'eth_accounts'
             });
 

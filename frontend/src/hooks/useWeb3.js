@@ -28,7 +28,7 @@ export default function useWeb3() {
         try{
             const contract = getMarketplaceContract(true);
 
-            const tx = contract.buyMarketItem(tokenId, {value: ethers.utils.parseEther(price)});
+            const tx = await contract.buyMarketItem(tokenId, {value: price});
             await tx.wait();
         }catch(error) {
             console.error("Error buying NFT: ", error);

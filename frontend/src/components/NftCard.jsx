@@ -12,7 +12,7 @@ const NftCard = ({nft, onBuy}) => {
        <h3 className='text-lg font-semibold text-gray-200 text-center'>{nft.name}</h3>
         <p className='text-sm text-gray-300 text-center'>{nft.description}</p>
         <p className='mt-2 font-bold text-center text-white'>{ethers.utils.formatEther(nft.price)} ETH</p>
-        <button className='mt-3 px-4 py-1.5 bg-yellow-300 rounded hover:bg-yellow-500 cursor-pointer transition-transform duration-300' onClick={onBuy}>Buy Now</button>
+        <button className='mt-3 px-4 py-1.5 bg-yellow-300 rounded hover:bg-yellow-500 cursor-pointer transition-transform duration-300' onClick={()=> onBuy(nft.itemId, nft.price)}>Buy Now</button>
        </div>
       </div>
     </div>

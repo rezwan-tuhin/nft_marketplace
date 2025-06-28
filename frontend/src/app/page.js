@@ -1,11 +1,14 @@
 'use client'
 import NftCard from '@/components/NftCard'
 import { getMarketplaceContract, getNftContract } from '@/lib/getContract';
+import useWeb3 from '@/hooks/useWeb3';
 import React, { useEffect, useState } from 'react'
 
 const Home = () => {
 
   const [nft, setNft] = useState([]);
+  const {buyNft} = useWeb3();
+
 
 useEffect(() => {
   const fetchNft = async() => {
@@ -21,6 +24,7 @@ useEffect(() => {
           const metadata = await response.json();
 
           return {
+            itemId: item.itemId.toString(),
             tokenId: item.tokenId.toString(),
             price: item.price.toString(),
             seller: item.seller,
@@ -40,12 +44,13 @@ useEffect(() => {
   fetchNft();
 }, []);
 
-console.log(nft);
-
-
 
   const handleBuy = async(itemId, price) => {
-    //buy code will be here
+    try{
+       await buyNft(itemId, price);
+    }catch(error) {
+      console.log("Error buying nft: ", error);
+    }
   }
   return (
     <div className='flex-1 bg-stone-900 h-auto'>
