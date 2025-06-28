@@ -89,10 +89,10 @@ const MyNft = () => {
               <div className="absolute bottom-0 flex flex-col items-center overflow-hidden bg-gray-700 w-full py-4 px-2 rounded-b-lg transition-transform duration-300 translate-y-20 z-10">
                 <h2 className="text-xl text-gray-200 text-center mb-2 font-bold">{item.name}</h2>
                 {/* <p className="text-sm text-gray-200 text-center">{item.description}</p> */}
-                <input type="number" placeholder="Price (ETH)" value={price} onChange={(e) => setPrice(prev => ({...prev, [item.tokenId] : e.target.value}))}
+                <input type="number" placeholder="Price (ETH)" value={price[item.tokenId] || ''} onChange={(e) => setPrice(prev => ({...prev, [item.tokenId] : e.target.value}))}
                 className=" px-4 py-1 w-full placeholder-gray-200 text-gray-200 border border-gray-300 outline-0 rounded-lg mb-2" required/>
 
-                <button onClick={()=>hanldeLising(item.contractAddress, item.tokenId, price[item.tokenId])} disabled={loading} className="px-4 py-1.5 bg-blue-500 hover:bg-blue-700 mt-2 rounded-lg text-white cursor-pointer">{loading[item.tokenId]? 'Listing...' : 'List Now'}</button>
+                <button onClick={()=>hanldeLising(item.contractAddress, item.tokenId, price[item.tokenId])} disabled={loading[item.tokenId]} className="px-4 py-1.5 bg-blue-500 hover:bg-blue-700 mt-2 rounded-lg text-white cursor-pointer">{loading[item.tokenId]? 'Listing...' : 'List Now'}</button>
               </div>
               </div>
             </div>
