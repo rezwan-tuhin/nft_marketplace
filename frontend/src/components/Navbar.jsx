@@ -6,16 +6,22 @@ import Link from 'next/link';
 const Navbar = () => {
     const {currentAccount, connectWallet} = useWallet();
   return (
-    <nav className='flex justify-between items-center py-4 px-4 md:px-16 lg:px-24 bg-stone-900 border-b-[0.2px] border-white text-white'>
+    <nav className='flex flex-col md:flex-row justify-between items-center py-4 px-4 md:px-16 lg:px-24 bg-stone-900 border-b-[0.1px] border-gray-500 text-white'>
         <div className='text-xl font-bold'>
             <Link href='/'>NFT Marketplace</Link>
         </div>
 
-        <div className='space-x-4'>
+        <div className='space-x-4 text-sm mt-2 sm:mt-0 md:text-lg'>
             <Link href='/'>Home</Link>
-            <Link href='/create'>Create NFT</Link>
-            <Link href='/list-nft'>List NFT</Link>
-            <Link href='/my-nft'>My NFT</Link>
+           {
+            currentAccount && (
+              <>
+              <Link href='/create'>Create NFT</Link>
+              <Link href='/my-nft'>My NFT</Link>
+              </>
+              
+            )
+           }
 
             {currentAccount ? 
             <span className='bg-gray-700 px-3 py-1 rounded'>{currentAccount.slice(0,6)}...{currentAccount.slice(-4)}</span>:
