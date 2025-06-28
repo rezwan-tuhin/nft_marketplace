@@ -54,7 +54,7 @@ const Create = () => {
   return (
     <div className="flex-1 flex flex-col justify-center items-center bg-stone-900 px-4 md:px-16 lg:px-24 py-4 h-auto">
       <div className='flex flex-col w-full md:w-4/12'>
-      <h1 className="text-3xl text-gray-200 font-bold mb-6">Mint NFT with Pinata</h1>
+      <h1 className="text-3xl text-gray-200 font-bold mb-6">Mint NFT</h1>
 
 <input
   type="file"
