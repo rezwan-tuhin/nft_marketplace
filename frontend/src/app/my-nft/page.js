@@ -11,11 +11,13 @@ const MyNft = () => {
 
   const [mintedNft, setMintedNft] = useState([]);
   const[loading, setLoading] = useState({});
+  const [loadingPage, setLoadingPage] = useState(true);
   const[price, setPrice] = useState({});
 
 
   const fetchMintedNft = async () => {
     try {
+      setLoadingPage(true);
       if (!currentAccount) return;
       const nftContract = getNftContract();
   
@@ -51,8 +53,8 @@ const MyNft = () => {
               description: metadata.description,
             };
           } catch (err) {
-            console.warn(`Failed to process token ${tokenId}:`, err);
-            return null;
+            console.error(`Failed to process token ${tokenId}:`, err);
+            
           }
         })
       );
@@ -62,6 +64,8 @@ const MyNft = () => {
       //this code is above line's alternative nftData.filter(item => item !== null && item !== undefined && item !== false);
     } catch (error) {
       console.error("Error fetching minted nft: ", error);
+    }finally{
+      setLoadingPage(false);
     }
   };
   
@@ -91,6 +95,30 @@ const MyNft = () => {
     <div className="flex-1 h-auto bg-stone-900">
       <div className="px-4 md:px-16 lg:px-24 py-4 flex flex-col items-center">
         <h2 className="text-xl text-gray-200 font-bold">My NFT</h2>
+
+        { loadingPage && (
+          <div className="px-4 md:px-16 lg:px-24 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 py-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="animate-pulse bg-gray-700 rounded">
+                <div className='flex flex-col items-center h-[340px] overflow-hidden rounded-lg shadow-md p-4'>
+      <div className='relative'>
+      <div className='w-[300px] h-[200px] overflow-hidden object-cover rounded-lg'> </div>
+       <div className='flex flex-col items-center bg-gray-700 w-full py-4 z-10 rounded-b-lg'>
+       <div className='w-4/12 h-4 bg-gray-500 border-1 border-gray-500 rounded-full'></div>
+        <div className='w-8/12 h-6 mt-2 bg-gray-500 rounded-full'></div>
+        <div className='w-4/12 h-4 mt-4 bg-gray-500 rounded-full'></div>
+
+       </div>
+      </div>
+    </div>
+        </div>
+            ))}
+          </div>
+        )}
+
+
+
+
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 py-4 mb-4">
           {mintedNft.map((item, index) => (
             <div key={index} className='flex flex-col items-center h-[340px] overflow-hidden rounded-lg shadow-md p-4 group'>
